@@ -79,7 +79,7 @@ def login():
         f"?client_id={CLIENT_ID}"
         f"&redirect_uri={REDIRECT_URI}"
         f"&response_type=code"
-        f"&scope=offline_access"
+        f"&scope=offline_access egv calibration device statistics event"
     )
     return RedirectResponse(url)
 
@@ -94,6 +94,8 @@ def callback(code: str):
         "redirect_uri": REDIRECT_URI,
     }
     r = requests.post(DEXCOM_TOKEN_URL, data=data)
+
+    print("🔎 Callback response:", r.status_code, r.text)  # <-- ADD THIS
 
     if r.status_code != 200:
         return JSONResponse({"error": r.text}, status_code=r.status_code)
@@ -114,7 +116,7 @@ def fetch_egvs():
             return {"error": "No valid tokens. Please login first via /login"}
 
     end = datetime.utcnow()
-    start = (end - timedelta(days=30)).strftime("%Y-%m-%dT%H:%M:%S")
+    start = (end - timedelta(days=7)).strftime("%Y-%m-%dT%H:%M:%S")
     end_str = end.strftime("%Y-%m-%dT%H:%M:%S")
 
     params = {
