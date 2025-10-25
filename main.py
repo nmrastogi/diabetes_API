@@ -12,7 +12,7 @@ load_dotenv()
 # Dexcom API settings - Production Mode Only
 CLIENT_ID = os.getenv("DEXCOM_CLIENT_ID")
 CLIENT_SECRET = os.getenv("DEXCOM_CLIENT_SECRET")
-REDIRECT_URI = os.getenv("DEXCOM_REDIRECT_URI", "https://localhost:8080/callback")
+REDIRECT_URI = os.getenv("DEXCOM_REDIRECT_URI", "http://localhost:8081/callback")
 
 # Production Dexcom API endpoints
 DEXCOM_AUTH_URL = "https://api.dexcom.com/v2/oauth2/login"
@@ -158,4 +158,5 @@ def fetch_egvs():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8080)
+    # For localhost HTTPS testing, we'll use HTTP but handle HTTPS redirects
+    uvicorn.run(app, host="127.0.0.1", port=8081, ssl_keyfile=None, ssl_certfile=None)

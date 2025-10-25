@@ -11,7 +11,7 @@ CLIENT_SECRET = os.getenv("DEXCOM_CLIENT_SECRET")
 
 # Production Dexcom API endpoints only
 BASE_URL = "https://api.dexcom.com/v2/oauth2"
-REDIRECT_URI = os.getenv("DEXCOM_REDIRECT_URI", "https://localhost:8080/callback")
+REDIRECT_URI = os.getenv("DEXCOM_REDIRECT_URI", "http://localhost:8081/callback")
 
 DEXCOM_AUTH_URL = f"{BASE_URL}/login"
 DEXCOM_TOKEN_URL = f"{BASE_URL}/token"
@@ -94,4 +94,4 @@ def refresh():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8080)
+    uvicorn.run(app, host="127.0.0.1", port=8081)
