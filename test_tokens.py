@@ -8,15 +8,10 @@ load_dotenv()
 
 CLIENT_ID = os.getenv("DEXCOM_CLIENT_ID")
 CLIENT_SECRET = os.getenv("DEXCOM_CLIENT_SECRET")
-DEXCOM_ENV = os.getenv("DEXCOM_ENV", "sandbox").lower()  # "sandbox" or "prod"
 
-# Choose base URL based on environment
-if DEXCOM_ENV == "prod":
-    BASE_URL = "https://api.dexcom.com/v2/oauth2"
-    REDIRECT_URI = os.getenv("DEXCOM_REDIRECT_URI", "https://localhost:8080/callback")
-else:
-    BASE_URL = "https://sandbox-api.dexcom.com/v2/oauth2"
-    REDIRECT_URI = os.getenv("DEXCOM_REDIRECT_URI", "http://localhost:8080/callback")
+# Production Dexcom API endpoints only
+BASE_URL = "https://api.dexcom.com/v2/oauth2"
+REDIRECT_URI = os.getenv("DEXCOM_REDIRECT_URI", "https://localhost:8080/callback")
 
 DEXCOM_AUTH_URL = f"{BASE_URL}/login"
 DEXCOM_TOKEN_URL = f"{BASE_URL}/token"
@@ -30,7 +25,8 @@ app = FastAPI()
 @app.get("/")
 def home():
     return {
-        "message": f"Dexcom OAuth Demo ({DEXCOM_ENV})",
+        "message": "Dexcom OAuth Demo - Production Mode",
+        "environment": "production",
         "auth_url": DEXCOM_AUTH_URL,
         "redirect_uri": REDIRECT_URI,
         "endpoints": ["/login", "/callback", "/refresh"],
@@ -95,3 +91,7 @@ def refresh():
     tokens = r.json()
     TOKENS.update(tokens)
     return {"message": "Access token refreshed!", "tokens": tokens}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8080)

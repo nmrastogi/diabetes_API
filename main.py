@@ -9,11 +9,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Dexcom API settings
+# Dexcom API settings - Production Mode Only
 CLIENT_ID = os.getenv("DEXCOM_CLIENT_ID")
 CLIENT_SECRET = os.getenv("DEXCOM_CLIENT_SECRET")
-REDIRECT_URI = os.getenv("DEXCOM_REDIRECT_URI")
+REDIRECT_URI = os.getenv("DEXCOM_REDIRECT_URI", "https://localhost:8080/callback")
 
+# Production Dexcom API endpoints
 DEXCOM_AUTH_URL = "https://api.dexcom.com/v2/oauth2/login"
 DEXCOM_TOKEN_URL = "https://api.dexcom.com/v2/oauth2/token"
 DEXCOM_EGVS_URL = "https://api.dexcom.com/v2/users/self/egvs"
@@ -69,7 +70,13 @@ app = FastAPI()
 
 @app.get("/")
 def home():
-    return {"message": "Dexcom OAuth + CSV Demo", "endpoints": ["/login", "/callback", "/fetch-egvs"]}
+    return {
+        "message": "Dexcom API Data Fetcher - Production Mode", 
+        "environment": "production",
+        "base_url": "https://api.dexcom.com/v2",
+        "endpoints": ["/login", "/callback", "/fetch-egvs"],
+        "redirect_uri": REDIRECT_URI
+    }
 
 @app.get("/login")
 def login():
@@ -148,3 +155,7 @@ def fetch_egvs():
         "message": f"Saved {len(df)} records to {CSV_FILE}",
         "file": CSV_FILE
     }
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8080)

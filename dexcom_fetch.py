@@ -13,7 +13,7 @@ REDIRECT_URI = os.getenv("DEXCOM_REDIRECT_URI")
 ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
 REFRESH_TOKEN = os.getenv("REFRESH_TOKEN")
 
-DEXCOM_BASE_URL = "https://sandbox-api.dexcom.com/v2"  # use production endpoint later
+DEXCOM_BASE_URL = "https://api.dexcom.com/v2"  # Production endpoint
 CSV_FILE = "glucose_data.csv"
 
 
