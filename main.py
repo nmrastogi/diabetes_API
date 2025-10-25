@@ -9,15 +9,15 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Dexcom API settings - Production Mode Only
+# Dexcom API settings - Sandbox Mode for Testing
 CLIENT_ID = os.getenv("DEXCOM_CLIENT_ID")
 CLIENT_SECRET = os.getenv("DEXCOM_CLIENT_SECRET")
 REDIRECT_URI = os.getenv("DEXCOM_REDIRECT_URI", "http://localhost:8081/callback")
 
-# Production Dexcom API endpoints
-DEXCOM_AUTH_URL = "https://api.dexcom.com/v2/oauth2/login"
-DEXCOM_TOKEN_URL = "https://api.dexcom.com/v2/oauth2/token"
-DEXCOM_EGVS_URL = "https://api.dexcom.com/v2/users/self/egvs"
+# Sandbox Dexcom API endpoints for testing
+DEXCOM_AUTH_URL = "https://sandbox-api.dexcom.com/v2/oauth2/login"
+DEXCOM_TOKEN_URL = "https://sandbox-api.dexcom.com/v2/oauth2/token"
+DEXCOM_EGVS_URL = "https://sandbox-api.dexcom.com/v2/users/self/egvs"
 
 # Local storage
 TOKENS = {}
@@ -71,9 +71,9 @@ app = FastAPI()
 @app.get("/")
 def home():
     return {
-        "message": "Dexcom API Data Fetcher - Production Mode", 
-        "environment": "production",
-        "base_url": "https://api.dexcom.com/v2",
+        "message": "Dexcom API Data Fetcher - Sandbox Mode", 
+        "environment": "sandbox",
+        "base_url": "https://sandbox-api.dexcom.com/v2",
         "endpoints": ["/login", "/callback", "/fetch-egvs"],
         "redirect_uri": REDIRECT_URI
     }
